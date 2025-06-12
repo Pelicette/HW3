@@ -190,3 +190,31 @@ p1의 prototype은 Person.prototype와 같으므로 같은 출력이다.
 var p4 = new p1.__proto__.constructor('사람4') __proto__는 생성자 함수의 prototype을 참조하므로 앞의 출력과 같다.
 
 var p5 = new p1.constructor('사람5') 에서 __proto__는 생략 가능하므로 앞의 출력과 같다. 
+
+
+
+## 6-6
+
+원본 함수의 메서드와 동일한 이름의 메서드를 인스턴스가 가지고 있을때 어떻게 되는가??
+
+자바 스크립트에서 메서드를 찾는 방법은 가장 가까운 자신의 프로퍼티에서 찾고 없으면 __proto__로 생성자 함수의 메서드를 찾는것이다.
+
+
+```
+var Person = function(name) {
+  this.name = name;
+};
+Person.prototype.getName = function() {
+  return this.name;
+};
+
+var iu = new Person('지금');
+iu.getName = function() {
+  return '바로 ' + this.name;
+};
+console.log(iu.getName());
+```
+
+Person이 getName 메서드를 가지고 있고 이후 iu.getName = function()로 중복된 이름의 메서드를 만들고 수행했다
+
+앞에서 설명한 것과 같이 가장가까운 자신의 프로퍼티를 검색하여 iu.getName을 수행한다. 출력은 바로 지금이 나온다. 
