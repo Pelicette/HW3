@@ -246,3 +246,24 @@ arr.hasOwnProperty(2)은 arr.__proto__.__proto__.hasOwnProperty(2)로 arr.__prot
 
 Object.prototype을 가리킨다 즉 __proto__을 2번생략하여 Object의 메서드를 사용할수있다. 
 
+
+
+## 6-8
+
+메서드 오버라이드와 프로토타입 체이닝을 기반으로 어떤메서드가 수행되는지 알아보자 
+
+```
+var arr = [1, 2];
+Array.prototype.toString.call(arr);
+Object.prototype.toString.call(arr);
+arr.toString();
+
+arr.toString = function() {
+  return this.join('_');
+};
+arr.toString();
+```
+
+arr.toString() 수행시 프로토타입 체이닝을 때라 가장 가까운 Array.prototype.toString을 적용한다.
+
+이후 arr.toString = function()으로 arr객체에 매서드를 정의하고 다시 arr.toString()수행시 가장 가까운 자신의 arr.toString = function()를 수행한다.
