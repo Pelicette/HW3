@@ -310,3 +310,32 @@ data.forEach(function(datum) {
 에서 모든 데이터 타입에 대해서 프로토타입 체이닝을따라 메서드를 찾아내 정상동작해버린다.
 
 따라서 객체를 대상으로 동작하게 만들고 싶을때는 static method로 부여해야한다.
+
+
+
+## 6-10
+
+프로토타입 체인은 2단계뿐만아니라 이론상 무한대로 가능하다. 
+
+그 방법은 __proto__가 생성자 함수의 prototype이 연결하고자 하는 상위 생성자 함수의 인스턴스를 바라보게 하면 된다. 
+
+```
+var Grade = function() {
+  var args = Array.prototype.slice.call(arguments);
+  for (var i = 0; i < args.length; i++) {
+    this[i] = args[i];
+  }
+  this.length = args.length;
+};
+var g = new Grade(100, 80);
+```
+
+var Grade = function()으로 유사배열 객체를 만들었는데 이것을 Array와 프로토타입 체이닝을 통해 Array의 메서드를 사용하고 싶다.
+
+```
+Grade.prototype=[];
+```
+
+을 추가하면 Grade.prototype이 배열을 가리키고 이 배열의 __proto__는 Array prototype이므로 Grade-Array-Object순으로 3단계의 
+
+프로토타입 체인이 완성되어 g에서 Array 메서드를 사용할수있다. 
