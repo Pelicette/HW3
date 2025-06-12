@@ -156,3 +156,37 @@ dataTypes.forEach(function(d) {
 모든 결과에 대해 false를 반환함으로 constructor를 바꾸어도 가리키는 대상이 바뀌는것이지 인스턴스의 원형이 바뀌는것이 아니다.
 
 따라서 인스턴스의 생성자정보를 알기위해 constuctor를 사용한다면 정확하지 않을수있다. 
+
+
+
+## 6-5
+
+아래와 같은 방법으로 constructor에 접근할수있다. 
+
+```
+var Person = function(name) {
+  this.name = name;
+};
+var p1 = new Person('사람1');
+var p1Proto = Object.getPrototypeOf(p1);
+var p2 = new Person.prototype.constructor('사람2'); 
+var p3 = new p1Proto.constructor('사람3'); 
+var p4 = new p1.__proto__.constructor('사람4');
+var p5 = new p1.constructor('사람5');
+
+[p1, p2, p3, p4, p5].forEach(function(p) {
+  console.log(p, p instanceof Person);
+});
+```
+
+var p2 = new Person.prototype.constructor 생성자 함수의 property의 constructor는 생성자 를 가리킨다. 
+
+var p1Proto = Object.getPrototypeOf(p1);
+
+var p3 = new p1Proto.constructor('사람3') 
+
+p1의 prototype은 Person.prototype와 같으므로 같은 출력이다. 
+
+var p4 = new p1.__proto__.constructor('사람4') __proto__는 생성자 함수의 prototype을 참조하므로 앞의 출력과 같다.
+
+var p5 = new p1.constructor('사람5') 에서 __proto__는 생략 가능하므로 앞의 출력과 같다. 
