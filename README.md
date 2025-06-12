@@ -118,3 +118,41 @@ Array.prototype.constructor는 생성자 자기자신을 가리키므로 true
 arr.__proto__.constructor proto의 constructor는 인스턴스 원형인 Array를 가리키므로 true
 
 arr.constructor는 __proto__가 생략가능하므로 위와같이 true
+
+
+## 6-4
+
+constructor는 읽기 속성이 부여된 경우 number ,string, boolean을 제외하고 값을 바꿀수 있다. 
+
+```
+var NewConstructor = function() {
+  console.log('this is new constuctor!');
+};
+var dataTypes = [
+  1, 
+  'test', 
+  true, 
+  {}, 
+  [], 
+  function() {}, 
+  /test/, 
+  new Number(), 
+  new String(), 
+  new Boolean(), 
+  new Object(), 
+  new Array(), 
+  new Function(),
+  new RegExp(), 
+  new Date(),
+  new Error(),
+];
+
+dataTypes.forEach(function(d) {
+  d.constructor = NewConstructor;
+  console.log(d.constructor.name, '&', d instanceof NewConstructor);
+});
+```
+
+모든 결과에 대해 false를 반환함으로 constructor를 바꾸어도 가리키는 대상이 바뀌는것이지 인스턴스의 원형이 바뀌는것이 아니다.
+
+따라서 인스턴스의 생성자정보를 알기위해 constuctor를 사용한다면 정확하지 않을수있다. 
