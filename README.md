@@ -267,3 +267,46 @@ arr.toString();
 arr.toString() 수행시 프로토타입 체이닝을 때라 가장 가까운 Array.prototype.toString을 적용한다.
 
 이후 arr.toString = function()으로 arr객체에 매서드를 정의하고 다시 arr.toString()수행시 가장 가까운 자신의 arr.toString = function()를 수행한다.
+
+
+
+## 6-9 
+
+Object.prototype이 언제나 프로토타입 체인의 최상단에 존재하게된다. 
+
+객체에서만 사용할 메서드를 Object.prototype에 정의하면 데이터 타입이 달라도 프로토타입 체이닝으로 메서드에 접근해버린다.
+
+```
+Object.prototype.getEntries = function() {
+  var res = [];
+  for (var prop in this) {
+    if (this.hasOwnProperty(prop)) {
+      res.push([prop, this[prop]]);
+    }
+  }
+  return res;
+};
+var data = [
+  ['object', { a: 1, b: 2, c: 3 }], 
+  ['number', 345],
+  ['string', 'abc'], 
+  ['boolean', false], 
+  ['func', function() {}], 
+  ['array', [1, 2, 3]],
+];
+data.forEach(function(datum) {
+  console.log(datum[1].getEntries());
+});
+```
+
+Object.prototype.getEntries = function()로 객체에서만 사용할 함수를 만들었는데 
+
+```
+data.forEach(function(datum) {
+  console.log(datum[1].getEntries());
+});
+```
+
+에서 모든 데이터 타입에 대해서 프로토타입 체이닝을따라 메서드를 찾아내 정상동작해버린다.
+
+따라서 객체를 대상으로 동작하게 만들고 싶을때는 static method로 부여해야한다.
