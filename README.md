@@ -94,3 +94,27 @@ console.dir(Array)를 보면 prototype에서 메서드들으리 정보를 볼수
 이 예제로 prototype과 __proto__의 관계를 명확히 알수있다. 평소에 사용한 [].메서드 는 __proto__가 생략되고 this는 []를 가리키면서 prototype안의 메서드를 
 
 사용가능하다. 
+
+
+
+## 6-3
+
+constructor라는 프로퍼티가 있는데 이것은 prototype객체와 __proto__안에 모두 있다. 이것은 원래의 생성자 함수를 가리키게하여 인스턴스의
+
+원형이 무었인지 알수있게한다.
+
+```
+var arr = [1, 2];
+Array.prototype.constructor === Array;
+arr.__proto__.constructor === Array; 
+arr.constructor === Array; 
+
+var arr2 = new arr.constructor(3, 4);
+console.log(arr2); 
+```
+
+Array.prototype.constructor는 생성자 자기자신을 가리키므로 true
+
+arr.__proto__.constructor proto의 constructor는 인스턴스 원형인 Array를 가리키므로 true
+
+arr.constructor는 __proto__가 생략가능하므로 위와같이 true
