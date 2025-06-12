@@ -199,6 +199,8 @@ var p5 = new p1.constructor('사람5') 에서 __proto__는 생략 가능하므�
 
 자바 스크립트에서 메서드를 찾는 방법은 가장 가까운 자신의 프로퍼티에서 찾고 없으면 __proto__로 생성자 함수의 메서드를 찾는것이다.
 
+이때 주의할것이 원본의 메서드가 없어진것이 아니라 그냥 덮어씌어진것이므로 원본 메서드는 남아있다. 
+
 
 ```
 var Person = function(name) {
@@ -218,3 +220,29 @@ console.log(iu.getName());
 Person이 getName 메서드를 가지고 있고 이후 iu.getName = function()로 중복된 이름의 메서드를 만들고 수행했다
 
 앞에서 설명한 것과 같이 가장가까운 자신의 프로퍼티를 검색하여 iu.getName을 수행한다. 출력은 바로 지금이 나온다. 
+
+
+
+
+## 6-7
+
+프로토타입 체인에 대한 예제이다. 
+
+모든 객체의 __proto__에는 Object.prototype이 연결된다.
+
+어떤 메서드를 호출하면 자신의 프로퍼티에 없으면 계속 __proto__를 타고 올라가서 찾는다. 
+
+이것을 프로토아비 체이닝 이라고한다.
+
+```
+var arr = [1, 2];
+arr.push(3);
+arr.hasOwnProperty(2); 
+```
+
+arr.push(3) 은 arr.__proto__.push(3)로 생략된 __proto__로 Arry의 메서드를 사용할수있다. 
+
+arr.hasOwnProperty(2)은 arr.__proto__.__proto__.hasOwnProperty(2)로 arr.__proto__는 Array의 prototype이고 여기서 추가로 .__proto__는
+
+Object.prototype을 가리킨다 즉 __proto__을 2번생략하여 Object의 메서드를 사용할수있다. 
+
