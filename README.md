@@ -735,3 +735,25 @@ var extendClass1 = function(SuperClass, SubClass, subMethods) {
 ```
 
 SubClass.prototype.consturctor = SubClass코드를 통하여 코드를 완성하였다. 
+
+
+
+## 7-13
+
+Object.create를 사용한 상속방법에서 subclass의 constructor가 subclass를 가리키게 하는 코드를 추가하여 완성한 extendclass이다. 
+
+```
+var extendClass3 = function(SuperClass, SubClass, subMethods) {
+  SubClass.prototype = Object.create(SuperClass.prototype);
+  SubClass.prototype.constructor = SubClass;
+  if (subMethods) {
+    for (var method in subMethods) {
+      SubClass.prototype[method] = subMethods[method];
+    }
+  }
+  Object.freeze(SubClass.prototype);
+  return SubClass;
+};
+```
+
+SubClass.prototype.consturctor = SubClass코드를 통하여 코드를 완성하였다. 
