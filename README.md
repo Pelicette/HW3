@@ -769,7 +769,7 @@ var extendClass = function(SuperClass, SubClass, subMethods) {
   SubClass.prototype = Object.create(SuperClass.prototype);
   SubClass.prototype.constructor = SubClass;
 
-```
+
   SubClass.prototype.super = function(propName) {
    
     var self = this;
@@ -783,7 +783,7 @@ var extendClass = function(SuperClass, SubClass, subMethods) {
       return prop.apply(self, arguments);
     };
   };
-  ```
+```
 
 인자를 받지않으면 SuperClass.apply(self, arguments)로 생성자 함수에 접근한다. 
 
@@ -793,7 +793,7 @@ if (typeof prop !== 'function') 으로 함수가 아닌경우 그대로 반환,
 
 나머지 부분은 이전 예제와 동일하다.
 
-  ```
+```
   if (subMethods) {
     for (var method in subMethods) {
       SubClass.prototype[method] = subMethods[method];
@@ -831,3 +831,45 @@ var Square = extendClass로 하위 클래에 다른 getArea함수를 정의한�
 sq.getArea()은 size is : 100 dmfh subclass의 메서드가 실행되고
 
 console.log(sq.super('getArea')())로 spuer로 getArea수행시 상위 클래스의 메서드에 접근하여 100을 출력한다. 
+
+
+
+## 7-15
+
+ES5와 ES6의 문법 차이를 보기위한 예제이다. 
+
+```
+var ES5 = function(name) {
+  this.name = name;
+};
+ES5.staticMethod = function() {
+  return this.name + ' staticMethod';
+};
+ES5.prototype.method = function() {
+  return this.name + ' method';
+};
+var es5Instance = new ES5('es5');
+console.log(ES5.staticMethod());
+console.log(es5Instance.method()); 
+
+var ES6 = class {
+  constructor(name) {
+    this.name = name;
+  }
+  static staticMethod() {
+    return this.name + ' staticMethod';
+  }
+  method() {
+    return this.name + ' method';
+  }
+};
+var es6Instance = new ES6('es6');
+console.log(ES6.staticMethod());
+console.log(es6Instance.method());
+```
+
+class 뒤로 바로 {}를 사용하고 클래스 본문이 시작된다. 클래스 본문에서는 fuction을 사용하지 않아도 모두 메서드로 인식하므로
+
+constructor뒤에 바로 ()가 붇는다. constructor는 생성자함수의 역활을 한다. static은 이 메서드가 static메서드로 생성자 함수만이 호출할수 있게한다.
+
+method()는 자동으로 prototype에 자동으로 할당되는 메서드이다. 
