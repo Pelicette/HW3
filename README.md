@@ -370,3 +370,25 @@ console.log(Rectangle.isRectangle(rect1));
 console.log(rect1.getArea()) 에서 __proto__가 생략되어 생성자 함수의 메서드인 getArea를 실행하여 12를 출력한다. 
 
 console.log(rect1.isRectangle(rect1)) 에서 프로토타입 체이닝을 따라 isRectangle을 찾을수 없어 오류를 출력한다. 
+
+
+
+## 7-2
+
+이제부터 예제 6-2-4의 코드를 기반으로 클래스에 대해 알아본다. 
+
+```
+var Grade = function() {
+  var args = Array.prototype.slice.call(arguments);
+  for (var i = 0; i < args.length; i++) {
+    this[i] = args[i];
+  }
+  this.length = args.length;
+};
+Grade.prototype = [];
+var g = new Grade(100, 80);
+```
+
+자바스크립트에서 클래스 상속은 프로토타입 체이닝을 연결했다는 것인데 문제가 발생한다.
+
+Grade.prototype = []처럼 빈 배열을 참조시킨것과 lengh프로퍼티가 삭제 가능하다는 점이다.
