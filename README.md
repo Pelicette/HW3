@@ -422,4 +422,37 @@ console.log(g);
 
 그 이유는 배열 인스턴스의 length는 삭제 불가능 이지만 사용자가 만든 유사배열객체인 Grade는 배열이 아니므로 length를 삭제가능하기때문이다.
 
-배열 0에 70이 들어가는 이유는 g의 length를 삭제했기 때문에 체이닝을 따라 빈배열을 찾게되어 거기에 값을 할당한것이다. 
+배열 0에 70이 들어가는 이유는 g의 length를 삭제했기 때문에 체이닝을 따라 빈배열을 찾게되어 length가 0이므로 인덱스 0에 값을 할당한것이다. 
+
+
+## 7-4
+
+이번에는 Grade.prototype에 빈 배열이 아니라 요소가 있는경우에 어떻게 되는지 보자.
+
+```
+var Grade = function() {
+  var args = Array.prototype.slice.call(arguments);
+  for (var i = 0; i < args.length; i++) {
+    this[i] = args[i];
+  }
+  this.length = args.length;
+};
+Grade.prototype = ['a', 'b', 'c', 'd'];
+var g = new Grade(100, 80);
+
+g.push(90);
+console.log(g);
+
+delete g.length;
+g.push(70);
+console.log(g);
+```
+
+Grade.prototype = ['a', 'b', 'c', 'd']로 빈 배열이 아닌 lenght가 4인 배열을 할당하여 진항해보자. 
+
+처음 90을 push한 것 까지는 정상적인 동작이지만 length를 삭제한 이후 70을 push하면 
+
+length가 삭제되어 프로토타입 체이닝을 따라 ['a', 'b', 'c', 'd']의 length가 4임을 찾고 5에 push한다. 
+
+결과적으로 클래스틔 값이 인스턴스의 동작에 영향을 주게 된다. 이는 원하는 동작이 아니다. 
+
