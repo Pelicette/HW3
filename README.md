@@ -456,3 +456,34 @@ length가 삭제되어 프로토타입 체이닝을 따라 ['a', 'b', 'c', 'd']�
 
 결과적으로 클래스틔 값이 인스턴스의 동작에 영향을 주게 된다. 이는 원하는 동작이 아니다. 
 
+
+
+## 7-5 
+
+상위 하위 클래스를 만드는 예제이다. 
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var rect = new Rectangle(3, 4);
+console.log(rect.getArea()); 
+
+var Square = function(width) {
+  this.width = width;
+};
+Square.prototype.getArea = function() {
+  return this.width * this.width;
+};
+var sq = new Square(5);
+console.log(sq.getArea());
+```
+Rectangle은 width와 height을 가지고 getArea는 이 둘을 곱하는 것이고 
+
+Square는 width만을 가지고 getArea는 width를 제곱하는 것이다. 
+
+이때 Sqaure에서 height를 사용하면서 width값을 부여한다면 getArea를 동일하게 만들수있다. 
