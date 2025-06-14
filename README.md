@@ -556,9 +556,14 @@ Square.prototype = new Rectangle()으로 프로토타입 체이닝을 통해 메
 
 원하는대로 하위 클래스가 만들어진다. 
 
+하지만 Square의 width에 임의의 값을 할당하고 생성된 객체 sq의 width를 지운다면 프로토타입 체이닝으로 width는 임의의 값을 가지게 될것이다.
+
+
 
 
 ## 7-8
+
+위의 예제와 같은 문제를 가지지 않게하기위해 
 
 클래스가 구체적인 데이터를 지니지 않게 하기위해 프로퍼티들을 지우고 새로운 프로퍼티를 추가 할 수없게하는 방법이있다. 
 
@@ -582,7 +587,7 @@ var extendClass1 = function(SuperClass, SubClass, subMethods) {
 
 Subclass의 prototype에 SuperClass를 할당하여 메서드를 상속하고 
 
-반복문으로 subclass에 프로티가 있다면 삭제시키고 사용자가 설정한 subMethod를 넣어준다. 
+반복문으로 subclass에 프로티가 있다면 삭제시키고 사용자가 설정한 subMethod를 넣어준후 freeze해준다. 
 
 ```
 var Rectangle = function(width, height) {
@@ -602,3 +607,45 @@ console.log(sq.getArea());
 위와 같은 방식으로 Rectanel의 하위 클래스 Square를 프로퍼티를 제거하고 superclass Rectangle의 argument에 모두 width정보를 넣어 메서드를 상속한다. 
 
 결과적으로 Square가 Rectangledml getArea를 사용할수있다. 
+
+
+
+## 7-9 
+
+또다른 방법으로 빈생성자 함수(Bridge)를 만들어서 빈생성자 함수의 prototype이 superclass의 prototype을 바라보게하고 subclass의 prototype에는 
+
+Bridge의 인스턴스를 할당하는 방법이 있다. 이렇게 하면 프로토타입 경로상에 데이터가 남아있지 않게된다. 
+
+```
+var extendClass2 = (function() {
+  var Bridge = function() {};
+  return function(SuperClass, SubClass, subMethods) {
+    Bridge.prototype = SuperClass.prototype;
+    SubClass.prototype = new Bridge();
+    if (subMethods) {
+      for (var method in subMethods) {
+        SubClass.prototype[method] = subMethods[method];
+      }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+  };
+})();
+
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var Square = extendClass2(Rectangle, function(width) {
+  Rectangle.call(this, width, width);
+});
+var sq = new Square(5);
+console.log(sq.getArea());
+```
+
+결과는  extendClass2로 square를 Rectangle의 서브 클래스로 할당하여 Rectangle의 getArea를 사용할수 있게 되었고 
+
+var sq = new Square(5)로 width=5 getArea의 출력은 25이다. 
