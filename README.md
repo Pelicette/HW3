@@ -677,3 +677,34 @@ console.log(sq.getArea());
 이 방법으로 subclass의 prototype의 __proto__가 superclass의 prototype을 바라보지만 superclass의 인스턴스가 되지는 않는다. 
 
 결과적으로 프로토타입 체이닝을 통해 메서드를 상속하여서 getArea를 사용하여 25를 출력한다.s
+
+
+
+## 7-11 
+
+앞의 예제에서 클래스 상속의 3가지 방법을 실습하였다. 하지만 subclass에서 constructor는 superclass이다. 
+
+subclass에는 constructor가 없고 프로토타입 체이닝으로 superclass의 constructor 자기자신인 superclass가 나오는 것이다.
+
+이제 subclass의 constructor가 subclass를 가리키게 해야한다. 
+
+```
+var extendClass1 = function(SuperClass, SubClass, subMethods) {
+  SubClass.prototype = new SuperClass();
+  for (var prop in SubClass.prototype) {
+    if (SubClass.prototype.hasOwnProperty(prop)) {
+      delete SubClass.prototype[prop];
+    }
+  }
+  SubClass.prototype.consturctor = SubClass;
+  if (subMethods) {
+    for (var method in subMethods) {
+      SubClass.prototype[method] = subMethods[method];
+    }
+  }
+  Object.freeze(SubClass.prototype);
+  return SubClass;
+};
+```
+
+ SubClass.prototype.consturctor = SubClass;를 추가하여 완성한 코드이다. 
