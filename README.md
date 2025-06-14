@@ -392,3 +392,34 @@ var g = new Grade(100, 80);
 자바스크립트에서 클래스 상속은 프로토타입 체이닝을 연결했다는 것인데 문제가 발생한다.
 
 Grade.prototype = []처럼 빈 배열을 참조시킨것과 lengh프로퍼티가 삭제 가능하다는 점이다.
+
+
+
+## 7-3 
+
+이전 예제에서 말한대로 lenght프로퍼티를 건드릴수 있음을 확인하는 예제이다. 
+
+```
+var Grade = function() {
+  var args = Array.prototype.slice.call(arguments);
+  for (var i = 0; i < args.length; i++) {
+    this[i] = args[i];
+  }
+  this.length = args.length;
+};
+Grade.prototype = [];
+var g = new Grade(100, 80);
+
+g.push(90);
+console.log(g);
+
+delete g.length;
+g.push(70);
+console.log(g);
+```
+
+원래 length가 3이였는데 delete g.length로 length를 삭제한후 70을 push해서 length가 1이된다. 
+
+그 이유는 배열 인스턴스의 length는 삭제 불가능 이지만 사용자가 만든 유사배열객체인 Grade는 배열이 아니므로 length를 삭제가능하기때문이다.
+
+배열 0에 70이 들어가는 이유는 g의 length를 삭제했기 때문에 체이닝을 따라 빈배열을 찾게되어 거기에 값을 할당한것이다. 
