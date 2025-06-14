@@ -873,3 +873,35 @@ class 뒤로 바로 {}를 사용하고 클래스 본문이 시작된다. 클래�
 constructor뒤에 바로 ()가 붇는다. constructor는 생성자함수의 역활을 한다. static은 이 메서드가 static메서드로 생성자 함수만이 호출할수 있게한다.
 
 method()는 자동으로 prototype에 자동으로 할당되는 메서드이다. 
+
+
+
+## 7-16
+
+ES5와 ES6의 클래스 상속이 어떻게 다른지 알아보는 예제이다. 
+
+```
+var Rectangle = class {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  getArea() {
+    return this.width * this.height;
+  }
+};
+var Square = class extends Rectangle {
+  constructor(width) {
+    super(width, width);
+  }
+  getArea() {
+    console.log('size is :', super.getArea());
+  }
+};
+```
+
+var Square = class extends Rectangle 으로 Square가 Rectangle를 상속받는다. 
+
+constructor안에 super는 상위 클래스의 constructor를 싱행한다. 
+
+console.log('size is :', super.getArea())처럼 super를 객체처럼 사용할수있다 
