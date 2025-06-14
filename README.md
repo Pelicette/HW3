@@ -555,3 +555,50 @@ var Square = function(width) {
 Square.prototype = new Rectangle()으로 프로토타입 체이닝을 통해 메서드에 접근하게 한다면 
 
 원하는대로 하위 클래스가 만들어진다. 
+
+
+
+## 7-8
+
+클래스가 구체적인 데이터를 지니지 않게 하기위해 프로퍼티들을 지우고 새로운 프로퍼티를 추가 할 수없게하는 방법이있다. 
+
+```
+var extendClass1 = function(SuperClass, SubClass, subMethods) {
+  SubClass.prototype = new SuperClass();
+  for (var prop in SubClass.prototype) {
+    if (SubClass.prototype.hasOwnProperty(prop)) {
+      delete SubClass.prototype[prop];
+    }
+  }
+  if (subMethods) {
+    for (var method in subMethods) {
+      SubClass.prototype[method] = subMethods[method];
+    }
+  }
+  Object.freeze(SubClass.prototype);
+  return SubClass;
+};
+```
+
+Subclass의 prototype에 SuperClass를 할당하여 메서드를 상속하고 
+
+반복문으로 subclass에 프로티가 있다면 삭제시키고 사용자가 설정한 subMethod를 넣어준다. 
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var Square = extendClass1(Rectangle, function(width) {
+  Rectangle.call(this, width, width);
+});
+var sq = new Square(5);
+console.log(sq.getArea()); 
+```
+
+위와 같은 방식으로 Rectanel의 하위 클래스 Square를 프로퍼티를 제거하고 superclass Rectangle의 argument에 모두 width정보를 넣어 메서드를 상속한다. 
+
+결과적으로 Square가 Rectangledml getArea를 사용할수있다. 
