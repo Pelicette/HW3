@@ -649,3 +649,31 @@ console.log(sq.getArea());
 결과는  extendClass2로 square를 Rectangle의 서브 클래스로 할당하여 Rectangle의 getArea를 사용할수 있게 되었고 
 
 var sq = new Square(5)로 width=5 getArea의 출력은 25이다. 
+
+
+
+## 7-10
+
+또다른 방법으로 Object.create를 사용하는 방법이 있다. 
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var Square = function(width) {
+  Rectangle.call(this, width, width);
+};
+Square.prototype = Object.create(Rectangle.prototype);
+Object.freeze(Square.prototype);
+
+var sq = new Square(5);
+console.log(sq.getArea());
+```
+
+이 방법으로 subclass의 prototype의 __proto__가 superclass의 prototype을 바라보지만 superclass의 인스턴스가 되지는 않는다. 
+
+결과적으로 프로토타입 체이닝을 통해 메서드를 상속하여서 getArea를 사용하여 25를 출력한다.s
