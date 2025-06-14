@@ -339,3 +339,34 @@ Grade.prototype=[];
 을 추가하면 Grade.prototype이 배열을 가리키고 이 배열의 __proto__는 Array prototype이므로 Grade-Array-Object순으로 3단계의 
 
 프로토타입 체인이 완성되어 g에서 Array 메서드를 사용할수있다. 
+
+
+## 7-1 
+
+자바스크립트에서는 클래스의 개념이 존재하지 않는다. 하지만 앞에서배운 프로토타입 체이닝을 사용하면 클래스와 같이 이해할수있다.
+
+인스턴스에 상속되는 메서드는 생성자 함수의 prototype에 정의되어있고 스태틱 맴버라고 하고 인스턴스 자체에서 만든 메서드는 프로토타입 메서드라고 한다.
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+Rectangle.isRectangle = function(instance) {
+  return (
+    instance instanceof Rectangle && instance.width > 0 && instance.height > 0
+  );
+};
+
+var rect1 = new Rectangle(3, 4);
+console.log(rect1.getArea()); 
+console.log(rect1.isRectangle(rect1)); 
+console.log(Rectangle.isRectangle(rect1)); 
+```
+
+console.log(rect1.getArea()) 에서 __proto__가 생략되어 생성자 함수의 메서드인 getArea를 실행하여 12를 출력한다. 
+
+console.log(rect1.isRectangle(rect1)) 에서 프로토타입 체이닝을 따라 isRectangle을 찾을수 없어 오류를 출력한다. 
