@@ -487,3 +487,33 @@ Rectangle은 width와 height을 가지고 getArea는 이 둘을 곱하는 것이
 Square는 width만을 가지고 getArea는 width를 제곱하는 것이다. 
 
 이때 Sqaure에서 height를 사용하면서 width값을 부여한다면 getArea를 동일하게 만들수있다. 
+
+
+## 7-6
+
+위의 예제의 설명에서와 같이 소스에서 Square의 getArea또한 Rectangle과 같게 코드를 구성하였고 
+
+이제 소스상에서 Square가 Rectangle의 하위 클래스로 볼수있다. 
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var rect = new Rectangle(3, 4);
+console.log(rect.getArea());
+
+var Square = function(width) {
+  this.width = width;
+  this.height = width;
+};
+Square.prototype.getArea = function() {
+  return this.width * this.height;
+};
+
+var sq = new Square(5);
+console.log(sq.getArea()); 
+```
