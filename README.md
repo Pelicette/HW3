@@ -708,3 +708,30 @@ var extendClass1 = function(SuperClass, SubClass, subMethods) {
 ```
 
  SubClass.prototype.consturctor = SubClass;를 추가하여 완성한 코드이다. 
+
+
+
+ ## 7-12
+
+빈 함수를 활용한 방법에서 subclass의 constructor가 subclass를 가리키게 하는 코드를 추가하여 완성한 extendclass이다. 
+
+ ```
+ var extendClass2 = (function() {
+  var Bridge = function() {};
+  return function(SuperClass, SubClass, subMethods) {
+    Bridge.prototype = SuperClass.prototype;
+    SubClass.prototype = new Bridge();
+    SubClass.prototype.consturctor = SubClass;
+    Bridge.prototype.constructor = SuperClass;
+    if (subMethods) {
+      for (var method in subMethods) {
+        SubClass.prototype[method] = subMethods[method];
+      }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+  };
+})();
+```
+
+SubClass.prototype.consturctor = SubClass코드를 통하여 코드를 완성하였다. 
