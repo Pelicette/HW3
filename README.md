@@ -517,3 +517,41 @@ Square.prototype.getArea = function() {
 var sq = new Square(5);
 console.log(sq.getArea()); 
 ```
+
+
+
+## 7-7
+
+메서드를 상속하기위해 앞의 예제보다 간단하게 구현할수있다. 
+
+```
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var rect = new Rectangle(3, 4);
+console.log(rect.getArea()); 
+
+var Square = function(width) {
+  Rectangle.call(this, width, width);
+};
+Square.prototype = new Rectangle();
+
+var sq = new Square(5);
+console.log(sq.getArea()); 
+```
+
+
+```
+var Square = function(width) {
+  Rectangle.call(this, width, width);
+};
+```
+로 Square에 width를 넣을시 Rectangle의 width와 height에 모두 width를 넣고 
+
+Square.prototype = new Rectangle()으로 프로토타입 체이닝을 통해 메서드에 접근하게 한다면 
+
+원하는대로 하위 클래스가 만들어진다. 
