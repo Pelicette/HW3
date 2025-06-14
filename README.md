@@ -757,3 +757,77 @@ var extendClass3 = function(SuperClass, SubClass, subMethods) {
 ```
 
 SubClass.prototype.consturctor = SubClass코드를 통하여 코드를 완성하였다. 
+
+
+
+## 7-14
+
+하위 클래스의 메서드에서 상위 클래스의 메서드의 결과를 사용하고 싶을때가 있을수 있다. 이를위해 super메서드를 사용한다.
+
+```
+var extendClass = function(SuperClass, SubClass, subMethods) {
+  SubClass.prototype = Object.create(SuperClass.prototype);
+  SubClass.prototype.constructor = SubClass;
+
+```
+  SubClass.prototype.super = function(propName) {
+   
+    var self = this;
+    if (!propName)
+      return function() {
+        SuperClass.apply(self, arguments);
+      };
+    var prop = SuperClass.prototype[propName];
+    if (typeof prop !== 'function') return prop;
+    return function() {
+      return prop.apply(self, arguments);
+    };
+  };
+  ```
+
+인자를 받지않으면 SuperClass.apply(self, arguments)로 생성자 함수에 접근한다. 
+
+if (typeof prop !== 'function') 으로 함수가 아닌경우 그대로 반환,
+
+위경우 모두 해당되지 않으면 prop.apply(self, arguments)으로 메서드에 접근한다. 
+
+나머지 부분은 이전 예제와 동일하다.
+
+  ```
+  if (subMethods) {
+    for (var method in subMethods) {
+      SubClass.prototype[method] = subMethods[method];
+    }
+  }
+  Object.freeze(SubClass.prototype);
+  return SubClass;
+};
+
+var Rectangle = function(width, height) {
+  this.width = width;
+  this.height = height;
+};
+Rectangle.prototype.getArea = function() {
+  return this.width * this.height;
+};
+var Square = extendClass(
+  Rectangle,
+  function(width) {
+    this.super()(width, width); 
+  },
+  {
+    getArea: function() {
+      console.log('size is :', this.super('getArea')()); 
+    },
+  }
+);
+var sq = new Square(10);
+sq.getArea(); 
+console.log(sq.super('getArea')()); 
+```
+
+var Square = extendClass로 하위 클래에 다른 getArea함수를 정의한다. 
+
+sq.getArea()은 size is : 100 dmfh subclass의 메서드가 실행되고
+
+console.log(sq.super('getArea')())로 spuer로 getArea수행시 상위 클래스의 메서드에 접근하여 100을 출력한다. 
